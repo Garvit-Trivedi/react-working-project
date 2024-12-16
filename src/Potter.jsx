@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import './Potter.css'; // Importing custom CSS file
+import './Potter.css'; // 
 
 const Potter = () => {
-  const [data, setData] = useState([]); // To store fetched data
-  const [endpoint, setEndpoint] = useState("characters"); // Default endpoint
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [data, setData] = useState([]); 
+  const [endpoint, setEndpoint] = useState("characters"); 
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(null); 
 
-  const BASE_URL = "https://potterapi-fedeperin.vercel.app/en"; // API Base URL
+  const BASE_URL = "https://potterapi-fedeperin.vercel.app/en"; 
 
-  // Fetch data from the selected endpoint
+ 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -30,7 +30,7 @@ const Potter = () => {
     };
 
     fetchData();
-  }, [endpoint]); // Re-fetch data when the endpoint changes
+  }, [endpoint]); 
 
   return (
     <div className="potter-container">
@@ -50,21 +50,19 @@ const Potter = () => {
         </div>
       </div>
 
-      {/* Loading State */}
+    
       {loading && <div className="loading-spinner"></div>}
 
-      {/* Error State */}
       {error && <p className="error-message">⚠️ Error: {error}</p>}
 
       <div className="data-display">
         <h2 className="data-title">{endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}</h2>
 
-        {/* Display Data */}
         <div className="data-cards">
           {data.length > 0 ? (
             data.map((item, index) => (
               <div key={item._id || index} className="data-card">
-                {/* Display Dynamic Content */}
+             
                 {item.image && <img src={item.image} alt={item.name || "Unnamed"} className="card-image" />}
                 {endpoint === "books" && (
                   <>

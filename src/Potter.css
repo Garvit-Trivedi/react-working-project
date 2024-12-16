@@ -1,4 +1,4 @@
-/* General Container */
+
 .potter-container {
     font-family: Arial, sans-serif;
     background: #282c34;
@@ -113,26 +113,4 @@
     color: #888;
   }
   
-  /* Animation for Pulse */
-  @keyframes pulse {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.7;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  
-  /* Spin Animation */
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  
+ 

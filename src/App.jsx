@@ -4,13 +4,13 @@ import Meals from './Meals.jsx';
 import Bank from './Banks.jsx';
 import Cocktails from './Cocktails.jsx';
 import Potter from './Potter.jsx';
-// import Navbar from './components/Navbar.jsx';
+
 import NavigationLinks from './components/NavigationLinks.jsx';
 
 const App = () => {
   return (
     <Router>
-      {/* <Navbar /> */}
+
       <div className="content">
         <NavigationLinks />
         <Routes>

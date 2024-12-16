@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './NavigationLinks.css'; // External styles for this component
+import './NavigationLinks.css'; 
 
 const NavigationLinks = () => {
   return (
