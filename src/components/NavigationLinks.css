@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     padding: 20px 0;
-    background: linear-gradient(90deg, #00bcd4, #009688);
+    background: linear-gradient(90deg, #31a5b4, #009688);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
@@ -16,13 +16,24 @@
     color: white;
     text-decoration: none;
     padding: 10px 20px;
-    background-color: #00796b;
+    background-color: #212928;
     border-radius: 5px;
     transition: all 0.3s ease;
   }
   
   .nav-link:hover {
-    background-color: #004d40;
+    background-color: #287c72;
     transform: scale(1.05);
   }
-  
+   
+
+
+
+
+
+
+
+
+
+
+

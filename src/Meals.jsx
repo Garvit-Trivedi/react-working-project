@@ -17,7 +17,7 @@ const Meals = () => {
   return (
     <div className="app-container">
       <header className="header">
-        <h1 className="title">Explore Delicious Meals</h1>
+        <h1 className="title">Search the Food</h1>
         <p className="sub-title">Search here 👇</p>
       </header>
 
@@ -44,7 +44,7 @@ const Meals = () => {
             </div>
           ))
         ) : (
-          <p className="no-results">{searchTerm ? "No meals found." : "Start by searching for a meal."}</p>
+          <p className="no-results">{searchTerm ? "No Food found." : "Start by searching for a Food."}</p>
         )}
       </div>
 
@@ -68,7 +68,7 @@ const Meals = () => {
       )}
 
       <footer className="footer">
-        <p>Made with love for foodies | Powered by <a href="https://www.themealdb.com/" target="_blank" rel="noopener noreferrer">TheMealDB API</a></p>
+        <p>Made with love for foodies | Powered by Garvit Trivedi <a href="https://www.themealdb.com/" target="_blank" rel="noopener noreferrer">TheMealDB API</a></p>
       </footer>
     </div>
   );
