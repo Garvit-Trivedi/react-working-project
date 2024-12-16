@@ -1,151 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import './BankDetails.css';
+import React, { useState } from "react";
+import "./BankDetails.css";
 
-const Bank = () => {
-  const [bank, setBank] = useState(null);
-  const [searchIFSC, setSearchIFSC] = useState('');
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [centers, setCenters] = useState([]);
+const Banks = () => {
+  const [bankDetails, setBankDetails] = useState(null);
+  const [ifscCode, setIfscCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [selectedState, setSelectedState] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const handleSearch = async () => {
+    setLoading(true);
+    setError("");
+    setBankDetails(null);
 
-  // Fetch States
-  useEffect(() => {
-    fetch('https://bank-apis.justinclicks.com/API/V1/STATE/')
-      .then((res) => res.json())
-      .then((data) => setStates(data))
-      .catch((err) => console.error('Error fetching states:', err));
-  }, []);
+    if (!ifscCode.trim()) {
+      setError("Please enter a valid IFSC code.");
+      setLoading(false);
+      return;
+    }
 
-  // Fetch Districts
-  const fetchDistricts = (state) => {
-    fetch(`https://bank-apis.justinclicks.com/API/V1/STATE/${state}/`)
-      .then((res) => res.json())
-      .then((data) => setDistricts(data))
-      .catch((err) => console.error('Error fetching districts:', err));
-  };
+    try {
+      const response = await fetch(
+        `https://bank-apis.justinclicks.com/API/V1/IFSC/${ifscCode.toUpperCase()}/`
+      );
 
-  // Fetch Cities
-  const fetchCities = (state, district) => {
-    fetch(`https://bank-apis.justinclicks.com/API/V1/STATE/${state}/${district}/`)
-      .then((res) => res.json())
-      .then((data) => setCities(data))
-      .catch((err) => console.error('Error fetching cities:', err));
-  };
+      if (!response.ok) {
+        throw new Error("Bank not found. Please check the IFSC code.");
+      }
 
-  // Fetch Centers
-  const fetchCenters = (state, district, city) => {
-    fetch(`https://bank-apis.justinclicks.com/API/V1/STATE/${state}/${district}/${city}/`)
-      .then((res) => res.json())
-      .then((data) => setCenters(data))
-      .catch((err) => console.error('Error fetching centers:', err));
-  };
-
-  // Fetch Bank Details
-  const fetchBankByIFSC = (ifsc) => {
-    fetch(`https://bank-apis.justinclicks.com/API/V1/IFSC/${ifsc}/`)
-      .then((res) => res.json())
-      .then((data) => setBank(data))
-      .catch((err) => console.error('Error fetching bank data:', err));
-  };
-
-  const handleStateChange = (e) => {
-    const state = e.target.value;
-    setSelectedState(state);
-    setSelectedDistrict('');
-    setSelectedCity('');
-    setCenters([]);
-    fetchDistricts(state);
-  };
-
-  const handleDistrictChange = (e) => {
-    const district = e.target.value;
-    setSelectedDistrict(district);
-    setSelectedCity('');
-    setCenters([]);
-    fetchCities(selectedState, district);
-  };
-
-  const handleCityChange = (e) => {
-    const city = e.target.value;
-    setSelectedCity(city);
-    fetchCenters(selectedState, selectedDistrict, city);
-  };
-
-  const handleSearch = () => {
-    if (searchIFSC) fetchBankByIFSC(searchIFSC);
+      const data = await response.json();
+      setBankDetails(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="bank-container">
-      <h2>Bank Finder</h2>
+    <div className="banks-container">
+      <h1 className="banks-title">Bank Finder</h1>
 
-      <div className="search-section">
+      <div className="search-container">
         <input
           type="text"
-          placeholder="Search by IFSC"
-          value={searchIFSC}
-          onChange={(e) => setSearchIFSC(e.target.value)}
+          placeholder="Enter IFSC Code"
+          value={ifscCode}
+          onChange={(e) => setIfscCode(e.target.value)}
+          className="search-input"
         />
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch} className="search-button">
+          Search
+        </button>
       </div>
 
-      <h3>Or Search by Location</h3>
-      <div className="dropdown-section">
-        <select value={selectedState} onChange={handleStateChange}>
-          <option value="">Select State</option>
-          {states.map((state) => (
-            <option key={state} value={state}>{state}</option>
-          ))}
-        </select>
+      {loading && <p className="loading">Searching...</p>}
+      {error && <p className="error-message">{error}</p>}
 
-        <select value={selectedDistrict} onChange={handleDistrictChange}>
-          <option value="">Select District</option>
-          {districts.map((district) => (
-            <option key={district} value={district}>{district}</option>
-          ))}
-        </select>
-
-        <select value={selectedCity} onChange={handleCityChange}>
-          <option value="">Select City</option>
-          {cities.map((city) => (
-            <option key={city} value={city}>{city}</option>
-          ))}
-        </select>
-      </div>
-
-      {centers.length > 0 && (
-        <div className="center-list">
-          <h3>Available Centers</h3>
-          <ul>
-            {centers.map((center) => (
-              <li key={center.IFSC}>
-                {center.BANK} - {center.BRANCH}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {bank && (
+      {bankDetails && (
         <div className="bank-details">
-          <h3>Bank Details</h3>
-          <p><strong>Bank:</strong> {bank.BANK}</p>
-          <p><strong>Branch:</strong> {bank.BRANCH}</p>
-          <p><strong>Address:</strong> {bank.ADDRESS}</p>
-          <p><strong>City:</strong> {bank.CITY}</p>
-          <p><strong>District:</strong> {bank.DISTRICT}</p>
-          <p><strong>State:</strong> {bank.STATE}</p>
-          <p><strong>IFSC:</strong> {bank.IFSC}</p>
-          <p><strong>Contact:</strong> {bank.CONTACT}</p>
+          <h2 className="bank-name">{bankDetails.BANK}</h2>
+          <p><strong>Branch:</strong> {bankDetails.BRANCH}</p>
+          <p><strong>IFSC:</strong> {bankDetails.IFSC}</p>
+          <p><strong>City:</strong> {bankDetails.CITY}</p>
+          <p><strong>State:</strong> {bankDetails.STATE}</p>
+          <p><strong>District:</strong> {bankDetails.DISTRICT}</p>
+          <p><strong>Address:</strong> {bankDetails.ADDRESS}</p>
+          <p><strong>Contact:</strong> {bankDetails.CONTACT || "N/A"}</p>
+          <p><strong>IMPS:</strong> {bankDetails.IMPS ? "Available" : "Not Available"}</p>
+          <p><strong>RTGS:</strong> {bankDetails.RTGS ? "Available" : "Not Available"}</p>
+          <p><strong>NEFT:</strong> {bankDetails.NEFT ? "Available" : "Not Available"}</p>
+          <p><strong>UPI:</strong> {bankDetails.UPI ? "Available" : "Not Available"}</p>
         </div>
       )}
     </div>
   );
 };
 
-export default Bank;
+export default Banks;

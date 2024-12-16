@@ -24,7 +24,7 @@ const Meals = () => {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search meals (e.g., pasta, chicken)..."
+          placeholder="Search meals"
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
